@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "PYTHONHASHSEED": "42",
+                "OMP_NUM_THREADS": "1"
+            }
+        },
+        {
+            "name": "pytest: AronaLM",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/.venv/Scripts/pytest.exe",
+            "args": ["-v", "--tb=short", "tests/"],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "PYTHONHASHSEED": "42",
+                "OMP_NUM_THREADS": "1"
+            }
+        },
+        {
+            "name": "Smoke Test (10 steps)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/train_smoke.py",
+            "args": ["--steps", "10"],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "PYTHONHASHSEED": "42",
+                "OMP_NUM_THREADS": "1"
+            }
+        }
+    ]
+}
