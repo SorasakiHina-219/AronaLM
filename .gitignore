@@ -24,6 +24,12 @@ data/
 experiments/b4/b4_3/corpus_v3_candidate.txt
 experiments/b4/data/
 
+# B5 experiment outputs: checkpoints (already via *.pt), logs, metadata,
+# pause-state JSONs -- keep the entry script run_b5.py tracked, exclude run
+# artifacts so parallel / repeated runs never pollute the repo.
+experiments/b5/*
+!experiments/b5/run_b5.py
+
 # Temporary training output
 train_*.txt
 experiments/b4/b4_4/training_err.txt
