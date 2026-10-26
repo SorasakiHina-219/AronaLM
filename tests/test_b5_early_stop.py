@@ -101,6 +101,34 @@ def test_legacy_trainer_unaffected(tmp_path):
     # checkpoints written as before
     assert (tmp_path / "checkpoint_step2.pt").exists()
     assert (tmp_path / "checkpoint_step4.pt").exists()
+    # legacy log-entry shape preserved: val_loss / val_perplexity keys
+    # always present (None when the observation is not valid), even though
+    # in practice the legacy evaluator almost always returned "ok".
+    assert "val_loss" in t.training_log[-1]
+    assert "val_perplexity" in t.training_log[-1]
+    # and the last eval on this small model should be a valid ok
+    assert t.training_log[-1]["val_loss"] is not None
+    assert t.training_log[-1]["val_perplexity"] is not None
+
+
+def test_legacy_trainer_log_shape_stable_on_anomaly(tmp_path, monkeypatch):
+    """When B5 is OFF and the validator raises, the legacy code path must
+    still produce log entries with `val_loss` / `val_perplexity` keys
+    (now None) so existing scripts that read them don't crash."""
+    m, cfg = make_model()
+    t = make_trainer(tmp_path, m, cfg, max_steps=2, eval_interval=1)
+    import aronalm.trainer as tmod
+    tmod.evaluate = lambda *a, **k: EvalResult(status="failed",
+                                                error_message="injected failure")
+    summary = t.train()
+    assert summary["stopped"] is None  # B5 off -> no stopping logic
+    assert (tmp_path / "checkpoint_step1.pt").exists()
+    assert (tmp_path / "checkpoint_step2.pt").exists()
+    last = t.training_log[-1]
+    assert "val_loss" in last
+    assert last["val_loss"] is None
+    assert last["val_perplexity"] is None
+    assert last.get("val_status") == "failed"
 
 
 # ----------------------------------------------------------------------

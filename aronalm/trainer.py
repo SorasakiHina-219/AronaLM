@@ -364,9 +364,15 @@ class Trainer:
                         break
 
                 # Legacy-compatible log fields (existing scripts read these)
+                # NOTE: in the legacy pre-B5 evaluator, `val_loss` / `val_perplexity`
+                # were ALWAYS present after every eval. To keep the log-entry shape
+                # stable when B5 is disabled, we write None for those keys when the
+                # result is not a valid observation. When B5 is enabled, anomalous
+                # observations also produce None here; B5-only key `val_status`
+                # records the non-"ok" status.
+                log_entry["val_loss"] = result.loss
+                log_entry["val_perplexity"] = result.perplexity
                 if result.is_valid:
-                    log_entry["val_loss"] = result.loss
-                    log_entry["val_perplexity"] = result.perplexity
                     pbar.set_postfix(
                         loss=f"{avg_train_loss:.4f}",
                         val_loss=f"{result.loss:.4f}",
