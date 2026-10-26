@@ -1,0 +1,62 @@
+{
+  "unique_baseline": 99.8,
+  "unique_candidate": 100.0,
+  "ngram2_baseline": 0.7979,
+  "ngram2_candidate": 0.8986,
+  "ngram3_baseline": 0.4223,
+  "ngram3_candidate": 0.6414,
+  "top3_first_baseline": 0.7022,
+  "top3_first_candidate": 0.692,
+  "vocab_baseline": 100.0,
+  "vocab_candidate": 100.0,
+  "herdan_baseline": 0.5011,
+  "herdan_candidate": 0.5307,
+  "length_baseline": {
+    "min": 5,
+    "max": 8,
+    "mean": 7.12,
+    "stdev": 0.94,
+    "median": 7.0
+  },
+  "length_candidate": {
+    "min": 3,
+    "max": 13,
+    "mean": 6.69,
+    "stdev": 2.05,
+    "median": 7.0
+  },
+  "punct_baseline": {
+    "period": 100.0,
+    "question": 0.0,
+    "excl": 0.0
+  },
+  "punct_candidate": {
+    "period": 92.6,
+    "question": 1.9,
+    "excl": 5.5
+  },
+  "compound_baseline": 21.9,
+  "compound_candidate": 23.8,
+  "neg_baseline": 0.0,
+  "neg_candidate": 7.6,
+  "question_baseline": 0.0,
+  "question_candidate": 1.9,
+  "conditional_baseline": 0.0,
+  "conditional_candidate": 0.0,
+  "causal_baseline": 1.3,
+  "causal_candidate": 15.0,
+  "contrast_baseline": 1.3,
+  "contrast_candidate": 7.7,
+  "comparison_baseline": 3.2,
+  "comparison_candidate": 9.7,
+  "overlap_train": 0,
+  "overlap_val": 0,
+  "overlap_test": 0,
+  "struct_compound": 23.8,
+  "struct_causality_so": 10.9,
+  "struct_comparison": 9.7,
+  "struct_contrast": 7.7,
+  "struct_negation": 7.6,
+  "struct_causality_because": 4.1,
+  "struct_question": 1.9
+}

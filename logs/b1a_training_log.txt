@@ -1,0 +1,88 @@
+=== B1a Experiment Started ===
+Config: C:\Users\18217\AronaLM\configs\smoke_b1a_dropout0.yaml
+  dropout: 0.0
+  batch_size: 16
+  lr: 0.0003
+  weight_decay: 0.01
+  max_steps: 200
+  seed: 42
+  checkpoint_dir: C:\Users\18217\AronaLM\checkpoints_v2b_dropout0
+  log_file: C:\Users\18217\AronaLM\logs\b1a_training_log.txt
+
+[1/5] Data preparation (skipping generation)...
+  Train: 4000 sents, 28462 tokens
+  Val:   500 sents, 3568 tokens
+  Test:  500 sents, 3584 tokens
+
+[2/5] Loading tokenizer...
+  Vocab: 558, Merge rules: 302
+
+[3/5] Creating model (dropout=0.0, random init)...
+  Params: 199,656, Dropout: 0.0
+  First weight mean: 0.000160
+
+[4/5] Building dataloaders and training...
+  Train chunks: 889
+  Val   chunks: 111
+  Test  chunks: 111
+  step=  1  train_loss=5.703192  elapsed=31.2s
+  step= 10  train_loss=1.959052  elapsed=438.3s
+  step= 20  train_loss=1.565221  elapsed=803.1s
+  step= 30  train_loss=1.443735  elapsed=1174.1s
+  step= 40  train_loss=1.368162  elapsed=1473.2s
+  step= 50  train_loss=1.355882  elapsed=1798.0s  val_loss=1.420907
+  step= 50  train_loss=1.355882  elapsed=1798.0s  val_loss=1.420907
+  step= 60  train_loss=1.298907  elapsed=2105.2s
+  step= 70  train_loss=1.270916  elapsed=2427.5s
+  step= 80  train_loss=1.256434  elapsed=2762.7s
+  step= 90  train_loss=1.175694  elapsed=3067.5s
+  step=100  train_loss=1.176955  elapsed=3380.0s  val_loss=1.388334
+  step=100  train_loss=1.176955  elapsed=3380.0s  val_loss=1.388334
+  step=110  train_loss=1.096096  elapsed=3674.4s
+  step=120  train_loss=1.060280  elapsed=3989.1s
+  step=130  train_loss=1.050040  elapsed=4342.2s
+  step=140  train_loss=0.956246  elapsed=4622.3s
+  step=150  train_loss=0.982474  elapsed=4928.4s  val_loss=1.470036
+  step=150  train_loss=0.982474  elapsed=4928.4s  val_loss=1.470036
+  step=160  train_loss=0.903346  elapsed=5262.1s
+  step=170  train_loss=0.873785  elapsed=5594.7s
+  step=180  train_loss=0.885234  elapsed=5926.6s
+  step=190  train_loss=0.774659  elapsed=6239.1s
+  step=200  train_loss=0.824023  elapsed=6544.9s  val_loss=1.655308
+  step=200  train_loss=0.824023  elapsed=6544.9s  val_loss=1.655308
+
+Training complete in 6545.91s
+  Final train loss: 0.824023
+  Final val loss: 1.655308
+  Params: 199,656
+
+[5/5] Final evaluation...
+  A-group step200: val=1.237522  test=1.234269  test_ppl=3.4359
+    B1a step100: val_loss=1.388334
+    B1a step150: val_loss=1.470036
+    B1a step200: val_loss=1.655308
+    B1a step50: val_loss=1.420907
+  B-group step100: val=1.388334  test=1.365972  test_ppl=3.9195
+
+  --- A-group (step200, dropout=0.1) generation ---
+    prompt='the cat'  temp=0.0  ->  'the cat and cat runs across the low cat. The low child'
+    prompt='the light'  temp=0.0  ->  'the light small. The good good makes good and good. The big'
+    prompt='a small bird'  temp=0.0  ->  'a small bird makes brightly. The big quite sees big and big. The'
+    prompt='the cat'  temp=1.0  ->  'the cat and cat puts before the hard cat. The hard so'
+    prompt='the light'  temp=1.0  ->  'the light he. The hard through puts soft and slow. chair and'
+    prompt='a small bird'  temp=1.0  ->  'a small bird makes brightly. A quick makes becomes under the bad comes.'
+
+  --- B-group (step100, dropout=0.0) generation ---
+    prompt='the cat'  temp=0.0  ->  'the cat dog. The quick takes gives low and high. The short'
+    prompt='the light'  temp=0.0  ->  'the light small. The big near gives gently. The quick every makes'
+    prompt='a small bird'  temp=0.0  ->  'a small bird makes gently. The good good was good and good. The'
+    prompt='the cat'  temp=1.0  ->  'the cat near. The warm goes sits short and cold. The soft'
+    prompt='the light'  temp=1.0  ->  'the light comes. The quite after comes softly. I see a deep'
+    prompt='a small bird'  temp=1.0  ->  'a small bird goes gently. The gives wants really through the quite puts.'
+
+============================================================
+B1a EXPERIMENT COMPLETE
+  Best B1a step: 100, val_loss=1.388334
+  A-group test_loss: 1.234269
+  B-group test_loss: 1.365972
+============================================================

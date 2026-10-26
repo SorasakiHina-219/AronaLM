@@ -1,0 +1,16 @@
+# AronaLM Phase B4-3: File Manifest
+# Generated: 2026-10-20T20:38:48.012873
+#
+
+## B4-3 NEW FILES
+d9d396648e74dde5b33facc945b446291a9c98cb8d510cf06b89eaa0cc3d947f      31,228  experiments/b4/b4_3/generate_data_v3.py
+9cf1961530a0a35f88eb37b175ffc90afc1fd4e97288e9c5894b2d34f73469f9     172,765  experiments/b4/b4_3/corpus_v3_candidate.txt
+4ae470e9b73a55a0994e8a07d88c05fb06c726186301df3bfaddf3e1b536aa00       1,471  experiments/b4/b4_3/audit_results_v5.json
+
+## B4-2 REFERENCE (unchanged)
+8c5496ee78771771b3c32d90d3c03673bbc75fc60f80ffceee3d34cd9a24d920      21,825  experiments/b4/vocab_expand/vocab_extended.json
+
+## OFFICIAL FILES (reference, unchanged)
+e8bbfc9a068cbcfdb95074bef72f5f175ae223733093ed7bd8fde21aa2e6363f      21,648  tokenizer/vocab.json
+c0aa62de059d69ca315d61d2643ea24646ac84dc7f3cb15cd9eda74c38fe6d3d      10,988  aronalm/model.py
+8ff70323b055216a5a0f5372831d5ac38345cfa73083ceba84d995a5d21369dd   2,432,953  checkpoints_v2c_500steps/checkpoint_step350.pt

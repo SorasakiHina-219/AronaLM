@@ -1,0 +1,33 @@
+# AronaLM Smoke Test Configuration
+# Phase A: ~200K parameter decoder-only transformer on CPU
+
+model:
+  vocab_size: 1000
+  max_seq_len: 64
+  d_model: 64
+  n_heads: 2
+  n_layers: 2
+  ffn_dim: 128
+  dropout: 0.1
+
+training:
+  batch_size: 16
+  lr: 0.0003
+  weight_decay: 0.01
+  max_steps: 200
+  log_interval: 10
+  eval_interval: 50
+  seed: 42
+  gradient_clip_norm: 1.0
+
+paths:
+  project_root: "C:\\Users\\18217\\AronaLM"
+  checkpoint_dir: "checkpoints"
+  log_dir: "logs"
+  tokenizer_path: "tokenizer/vocab.json"
+  data_dir: "data"
+
+generation:
+  max_new_tokens: 20
+  temperature: 1.0
+  top_k: null

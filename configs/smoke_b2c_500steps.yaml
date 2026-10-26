@@ -1,0 +1,35 @@
+# AronaLM Phase B2c: Extended Training (500 steps) Controlled Experiment
+# Identical to smoke.yaml except:
+#   - training.max_steps: 500  (vs baseline 200)
+#   - paths.checkpoint_dir: "checkpoints_v2c_500steps"
+
+model:
+  vocab_size: 1000
+  max_seq_len: 64
+  d_model: 64
+  n_heads: 2
+  n_layers: 2
+  ffn_dim: 128
+  dropout: 0.1
+
+training:
+  batch_size: 16
+  lr: 0.0003
+  weight_decay: 0.01
+  max_steps: 500
+  log_interval: 10
+  eval_interval: 50
+  seed: 42
+  gradient_clip_norm: 1.0
+
+paths:
+  project_root: "C:\\Users\\18217\\AronaLM"
+  checkpoint_dir: "checkpoints_v2c_500steps"
+  log_dir: "logs"
+  tokenizer_path: "tokenizer/vocab.json"
+  data_dir: "data"
+
+generation:
+  max_new_tokens: 20
+  temperature: 1.0
+  top_k: null

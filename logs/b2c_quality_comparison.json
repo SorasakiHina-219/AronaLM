@@ -1,0 +1,394 @@
+{
+  "a_v2_test_loss": 1.234269176210676,
+  "b2c_test_loss": 1.2016473157065255,
+  "a_v2_test_ppl": 3.4358665898866945,
+  "b2c_test_ppl": 3.3255907107815545,
+  "generations": {
+    "a_v2_step200": {
+      "0.0": {
+        "the cat": "the cat and cat runs across the low cat. The low child",
+        "the light": "the light small. The good good makes good and good. The big",
+        "a small bird": "a small bird makes brightly. The big quite sees big and big. The",
+        "a quick dog": "a quick dog makes very. The good good goes quite. The good good",
+        "the river": "the river The good good makes and good. The good under comes",
+        "big mountains": "big mountainsthe short big. The big good was softly near the ",
+        "the old tree": "the old tree really. The good takes jumps good and good. The good",
+        "a quiet room": "a quiet roomtakes gives very. The new finds puts good and good. ",
+        "bright stars": "bright starsThe bright jumps low and high. The hard woman needs "
+      },
+      "1.0": {
+        "the cat": "the cat fully. The new across comes very near the dog. deep",
+        "the light": "the light warmly. The bad gives gently near the takes. A soft",
+        "a small bird": "a small bird knows very. warm and bright finds near the big bright.",
+        "a quick dog": "a quick dog makes warmly. warmly and fully becomes after the small fully.",
+        "the river": "the river The cold has warmly near the low. I see a",
+        "big mountains": "big mountainsthe big slow. The quick light takes slow and slow. ",
+        "the old tree": "the old tree quickly. A bad was on the soft bad. short around",
+        "a quiet room": "a quiet roomtakes puts softly. wants jumps the bad was quite. short ",
+        "bright stars": "bright starsunder the dark high. The low dark makes deeply. The "
+      }
+    },
+    "b2c_step350": {
+      "0.0": {
+        "the cat": "the cat really. The good around sees good and good. The good",
+        "the light": "the light bright. The very hand runs very and very. The bright",
+        "a small bird": "a small bird sees brightly. The hard warm was hard and hard. The",
+        "a quick dog": "a quick dog makes brightly. The short child likes short and short. The",
+        "the river": "the river bird brightly. The slow most knows slow and slow. The",
+        "big mountains": "big mountainsthe big big. The small hard was small and small. ",
+        "the old tree": "the old tree brightly. The quite dark puts quite. The slow quick goes",
+        "a quiet room": "a quiet roomsuch needs quite and quite. The warm hand needs warm ",
+        "bright stars": "bright starsreally through the bright behind. The good softly comes good "
+      },
+      "1.0": {
+        "the cat": "the cat puts. The cold short holds quickly near the short. A",
+        "the light": "the light table. A slow behind jumps through the slow behind. A",
+        "a small bird": "a small bird becomes gently. The tree holds really through the bad tree.",
+        "a quick dog": "a quick dog finds slowly. I see a deep woman knows fully. A",
+        "the river": "the river woman wants after the high woman. The cold bird is",
+        "big mountains": "big mountainsthe big big. A quite deeply has after the quite ",
+        "the old tree": "the old tree deeply. The short good has short and short. The light",
+        "a quiet room": "a quiet roomis slowly. The light quick holds bad and light. quick ",
+        "bright stars": "bright starsreally near the wants. The low quick makes light and "
+      }
+    }
+  },
+  "analysis_stats": {
+    "a_v2": {
+      "0.0": [
+        {
+          "prompt": "the cat",
+          "n_tokens": 12,
+          "unique_ratio": 0.75,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.16666666666666666,
+          "pattern_xx": 1,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "the light",
+          "n_tokens": 12,
+          "unique_ratio": 0.75,
+          "dup_bigram_rate": 0.09090909090909091,
+          "repeat_near_rate": 0.16666666666666666,
+          "pattern_xx": 1,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "a small bird",
+          "n_tokens": 13,
+          "unique_ratio": 0.8461538461538461,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.07692307692307693,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "a quick dog",
+          "n_tokens": 13,
+          "unique_ratio": 0.6923076923076923,
+          "dup_bigram_rate": 0.16666666666666666,
+          "repeat_near_rate": 0.15384615384615385,
+          "pattern_xx": 0,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "the river",
+          "n_tokens": 12,
+          "unique_ratio": 0.75,
+          "dup_bigram_rate": 0.09090909090909091,
+          "repeat_near_rate": 0.08333333333333333,
+          "pattern_xx": 0,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "big mountains",
+          "n_tokens": 11,
+          "unique_ratio": 0.9090909090909091,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 10
+        },
+        {
+          "prompt": "the old tree",
+          "n_tokens": 13,
+          "unique_ratio": 0.7692307692307693,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.07692307692307693,
+          "pattern_xx": 0,
+          "vocab_types": 10
+        },
+        {
+          "prompt": "a quiet room",
+          "n_tokens": 12,
+          "unique_ratio": 1.0,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 12
+        },
+        {
+          "prompt": "bright stars",
+          "n_tokens": 11,
+          "unique_ratio": 0.9090909090909091,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.09090909090909091,
+          "pattern_xx": 1,
+          "vocab_types": 10
+        }
+      ],
+      "1.0": [
+        {
+          "prompt": "the cat",
+          "n_tokens": 12,
+          "unique_ratio": 0.9166666666666666,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "the light",
+          "n_tokens": 12,
+          "unique_ratio": 0.9166666666666666,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "a small bird",
+          "n_tokens": 13,
+          "unique_ratio": 1.0,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 13
+        },
+        {
+          "prompt": "a quick dog",
+          "n_tokens": 13,
+          "unique_ratio": 1.0,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 13
+        },
+        {
+          "prompt": "the river",
+          "n_tokens": 12,
+          "unique_ratio": 0.9166666666666666,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "big mountains",
+          "n_tokens": 11,
+          "unique_ratio": 0.8181818181818182,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.09090909090909091,
+          "pattern_xx": 1,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "the old tree",
+          "n_tokens": 13,
+          "unique_ratio": 0.9230769230769231,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 12
+        },
+        {
+          "prompt": "a quiet room",
+          "n_tokens": 12,
+          "unique_ratio": 1.0,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 12
+        },
+        {
+          "prompt": "bright stars",
+          "n_tokens": 11,
+          "unique_ratio": 0.8181818181818182,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 9
+        }
+      ]
+    },
+    "b2c": {
+      "0.0": [
+        {
+          "prompt": "the cat",
+          "n_tokens": 12,
+          "unique_ratio": 0.75,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.08333333333333333,
+          "pattern_xx": 0,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "the light",
+          "n_tokens": 12,
+          "unique_ratio": 0.8333333333333334,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.08333333333333333,
+          "pattern_xx": 0,
+          "vocab_types": 10
+        },
+        {
+          "prompt": "a small bird",
+          "n_tokens": 13,
+          "unique_ratio": 0.8461538461538461,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.07692307692307693,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "a quick dog",
+          "n_tokens": 13,
+          "unique_ratio": 0.8461538461538461,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.07692307692307693,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "the river",
+          "n_tokens": 12,
+          "unique_ratio": 0.8333333333333334,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.08333333333333333,
+          "pattern_xx": 0,
+          "vocab_types": 10
+        },
+        {
+          "prompt": "big mountains",
+          "n_tokens": 11,
+          "unique_ratio": 0.8181818181818182,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.18181818181818182,
+          "pattern_xx": 1,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "the old tree",
+          "n_tokens": 13,
+          "unique_ratio": 0.9230769230769231,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 12
+        },
+        {
+          "prompt": "a quiet room",
+          "n_tokens": 12,
+          "unique_ratio": 0.8333333333333334,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.08333333333333333,
+          "pattern_xx": 0,
+          "vocab_types": 10
+        },
+        {
+          "prompt": "bright stars",
+          "n_tokens": 11,
+          "unique_ratio": 0.8181818181818182,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.09090909090909091,
+          "pattern_xx": 0,
+          "vocab_types": 9
+        }
+      ],
+      "1.0": [
+        {
+          "prompt": "the cat",
+          "n_tokens": 12,
+          "unique_ratio": 0.9166666666666666,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "the light",
+          "n_tokens": 12,
+          "unique_ratio": 0.75,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "a small bird",
+          "n_tokens": 13,
+          "unique_ratio": 1.0,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 13
+        },
+        {
+          "prompt": "a quick dog",
+          "n_tokens": 13,
+          "unique_ratio": 0.9230769230769231,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 12
+        },
+        {
+          "prompt": "the river",
+          "n_tokens": 12,
+          "unique_ratio": 0.9166666666666666,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "big mountains",
+          "n_tokens": 11,
+          "unique_ratio": 0.8181818181818182,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.09090909090909091,
+          "pattern_xx": 1,
+          "vocab_types": 9
+        },
+        {
+          "prompt": "the old tree",
+          "n_tokens": 13,
+          "unique_ratio": 0.8461538461538461,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.07692307692307693,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "a quiet room",
+          "n_tokens": 12,
+          "unique_ratio": 0.9166666666666666,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        },
+        {
+          "prompt": "bright stars",
+          "n_tokens": 11,
+          "unique_ratio": 1.0,
+          "dup_bigram_rate": 0.0,
+          "repeat_near_rate": 0.0,
+          "pattern_xx": 0,
+          "vocab_types": 11
+        }
+      ]
+    }
+  }
+}

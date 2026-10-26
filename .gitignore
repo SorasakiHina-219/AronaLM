@@ -1,0 +1,31 @@
+# Python / IDE
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Environment / secrets
+.env
+
+# Training checkpoints (large, not part of source backup)
+checkpoints/
+checkpoints_v2/
+checkpoints_v2b_dropout0/
+checkpoints_v2b_dropout05/
+checkpoints_v2c_500steps/
+checkpoints_v2c_dropout015/
+experiments/b4/b4_4/
+experiments/b4/b4_5/
+experiments/b4/b4_5b/
+*.pt
+
+# Large datasets and candidate corpora (reviewed separately before backup)
+data/
+experiments/b4/b4_3/corpus_v3_candidate.txt
+experiments/b4/data/
+
+# Temporary training output
+train_*.txt
+experiments/b4/b4_4/training_err.txt
+experiments/b4/b4_4/training_log.txt.err
+experiments/b4/b4_4/training_output.txt
