@@ -1,0 +1,126 @@
+{
+  "schema": "aronalm.b5.results_summary/1",
+  "generated_utc": "2026-10-26T16:05:00Z",
+  "audit_commit": {
+    "sha": "42c48b11f35015f78fd9349fc937f8d2c11883bd",
+    "subject": "B5: add experiment entry script + ignore run artifacts",
+    "branch": "main",
+    "remote": "origin/main (SorasakiHina-219/AronaLM)",
+    "remote_in_sync_at_generation": true,
+    "implementation_commit": {
+      "sha": "d4fb934f6b9bf337b87405f3b23e9fe4c69febaa",
+      "subject": "B5: early-stop, anomaly pause, strict safe-recovery (K1-K6 + decisions A/B + P1-P8)"
+    },
+    "supplemental_record_commit": {
+      "sha": "6f8db7c1fb379d062a3c7114fc026c02fb04710d",
+      "subject": "docs: R2.16 supplemental B5 decision record"
+    }
+  },
+  "b5_parameters": {
+    "baseline_val_loss": 1.2278622048241752,
+    "warning_threshold": 1.234001515848296,
+    "hard_stop_threshold": 1.240140826872417,
+    "consecutive_count": 2,
+    "exemption_window": 10,
+    "pause_state_schema": "9-field P5 final form (6 required + 3 optional); no 10th field"
+  },
+  "experiments": {
+    "smoke": {
+      "mode": "smoke",
+      "max_steps": 50,
+      "b5_enabled": true,
+      "output_dir": "experiments/b5/b5_smoke_20261026_232235",
+      "output_dir_sha_status": "run artifacts are .gitignore-excluded and not committed; directory kept locally only",
+      "source_checkpoint": {
+        "path": "checkpoints_v2c_500steps/checkpoint_step350.pt",
+        "step": 350,
+        "size_bytes": 2432953,
+        "sha256": "8ff70323b055216a5a0f5372831d5ac38345cfa73083ceba84d995a5d21369dd",
+        "hash_verified_before_and_after_run": true
+      },
+      "seed": 42,
+      "eval_interval": 5,
+      "steps_executed": 50,
+      "evals_executed": 10,
+      "stopped": null,
+      "final_val_loss": 1.2268396275384086,
+      "final_val_perplexity": 3.4104342442355007,
+      "final_train_loss": 1.152760564334809,
+      "warn_consec_final": 0,
+      "hard_consec_final": 0,
+      "elapsed_sec_measured": 1178.03,
+      "cpu_peak_used": null,
+      "memory_peak_used": null,
+      "notes": "val_loss stayed below the warning threshold throughout; step 1 and step 10 fell inside the exemption window, so the observed val_loss=1.2400 at step 1 was NOT counted. No anomaly, no hard-stop, no pause_state.json written."
+    },
+    "main": {
+      "mode": "main",
+      "max_steps": 100,
+      "b5_enabled": true,
+      "output_dir": "experiments/b5/b5_main_20261026_234324",
+      "source_checkpoint": {
+        "path": "checkpoints_v2c_500steps/checkpoint_step350.pt",
+        "step": 350,
+        "sha256": "8ff70323b055216a5a0f5372831d5ac38345cfa73083ceba84d995a5d21369dd",
+        "independent_start": true
+      },
+      "seed": 42,
+      "eval_interval": 5,
+      "steps_executed": 100,
+      "evals_executed": 20,
+      "stopped": null,
+      "final_val_loss": 1.2342657021113805,
+      "final_val_perplexity": 3.43585465336573,
+      "final_train_loss": 1.147,
+      "warn_consec_final": 2,
+      "hard_consec_final": 0,
+      "warning_event": "P2 record-only warning triggered at step 100 (val_loss=1.2343 >= warning threshold 1.23400, 2 consecutive qualifying evals at steps 90 and 100); training completed normally, no stop",
+      "elapsed_sec_measured": 3015.73,
+      "cpu_peak_used": null,
+      "memory_peak_used": null,
+      "notes": "No hard-stop triggered (val_loss never reached 1.24014). No pause_state.json written. All checkpoints were written on the normal (non-stopped) eval steps, consistent with Decision B."
+    }
+  },
+  "tests": {
+    "command": "python -m pytest tests -q",
+    "total": 78,
+    "passed": 78,
+    "failed": 0,
+    "b5_specific_tests": 28,
+    "legacy_regression_tests": 50,
+    "b5_specific_coverage_note": "Includes fault-injection tests for: hard-stop trigger + state-write + no-checkpoint, anomaly pause halt + counter preservation + state-write, state-write failure (unwritable parent dir), hard-stop non-resumability, strict resume rejection on step/config/vocab/seq_len mismatch, 9-field P5 schema verification, P8 no-auto-recovery, and legacy log-key stability on anomaly. All runs use tmp_path fixtures and mocked evaluate(); no real checkpoint or training directory is touched."
+  },
+  "behavior_verified_by_real_training": [
+    "exemption window (steps 1-10 inclusive) does not increment counters",
+    "dual independent counters with >= comparison",
+    "clear-below-threshold semantics for the warning counter",
+    "P2 warning recorded but not stopping when hard-stop threshold not met",
+    "checkpoints written on the normal (non-stopped) eval path",
+    "no pause_state.json written when no anomaly or hard-stop occurred"
+  ],
+  "behavior_verified_by_tests_only": [
+    "hard-stop termination + 9-field state JSON write + no checkpoint on stop",
+    "anomaly (nan/inf/failed/empty) pause halts the loop, counters preserved, state JSON written",
+    "state-write failure stops training without checkpoint or fallback",
+    "hard_stop state can never be resumed via resume_from_pause",
+    "strict resume rejection on step mismatch, config checksum mismatch, vocab_size mismatch, max_seq_len mismatch",
+    "P8: mere existence of a valid state file does NOT auto-trigger recovery",
+    "P5: written state files contain exactly the approved 9 fields and no 10th field",
+    "legacy (B5 off) log-entry shape stability when the validator returns a non-ok status"
+  ],
+  "explicit_acceptance_limitations": [
+    "Normal training completion does NOT validate hard-stop or anomaly-pause under real fault conditions. Those paths are exercised only by isolated fault-injection tests using mocked evaluators; no real run of the B5 experiment triggered a hard-stop or anomaly.",
+    "CPU and memory peak usage were not sampled during either run (no psutil or equivalent instrumentation was in scope); the fields above are recorded as null, not estimated.",
+    "experiments/b5/* run artifacts (checkpoints, logs, metadata, pause-state JSONs) are excluded from Git via .gitignore; only the entry script and this summary JSON are committed."
+  ],
+  "open_issues": [
+    "Real-fault-trigger acceptance of hard-stop / anomaly-pause / state-write-failure / strict-resume is pending a controlled fault-injection experiment (e.g. temporarily lowering hard_stop_threshold or injecting a NaN eval value in an isolated output directory, never touching the two completed runs above).",
+    "Resource peak sampling (CPU / memory) would require a lightweight psutil-style hook in run_b5.py; no such instrumentation was added in this pass to keep the change set minimal.",
+    "The --b5-off comparison run has not been executed; legacy behavior is guaranteed instead by the 50 regression tests."
+  ],
+  "local_artifact_paths": [
+    "experiments/b5/b5_smoke_20261026_232235/",
+    "experiments/b5/b5_main_20261026_234324/",
+    "experiments/b5/run_b5.py"
+  ]
+}

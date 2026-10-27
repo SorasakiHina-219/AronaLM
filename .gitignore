@@ -24,11 +24,20 @@ data/
 experiments/b4/b4_3/corpus_v3_candidate.txt
 experiments/b4/data/
 
-# B5 experiment outputs: checkpoints (already via *.pt), logs, metadata,
-# pause-state JSONs -- keep the entry script run_b5.py tracked, exclude run
-# artifacts so parallel / repeated runs never pollute the repo.
-experiments/b5/*
-!experiments/b5/run_b5.py
+# B5 experiment outputs: keep the entry script and the auditable results
+# summary tracked, but exclude every run-output artifact (timestamped run
+# directories, any .pt checkpoint, logs, metadata, pause-state JSONs).
+# A directory-level exclusion cannot be re-included for its own files in
+# git, so we enumerate artifact patterns instead of `experiments/b5/`.
+experiments/b5/b5_smoke_*/
+experiments/b5/b5_main_*/
+experiments/b5/b5_smoke_legacy_*/
+experiments/b5/b5_main_legacy_*/
+experiments/b5/*.pt
+experiments/b5/training_log*.json
+experiments/b5/run_metadata*.json
+experiments/b5/pause_state*.json
+experiments/b5/__pycache__/
 
 # Temporary training output
 train_*.txt

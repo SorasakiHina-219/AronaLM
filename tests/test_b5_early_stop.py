@@ -377,6 +377,103 @@ def test_anomaly_resume_rejects_config_mismatch(tmp_path, monkeypatch):
     assert ok is False
 
 
+def test_anomaly_resume_rejects_seq_len_mismatch(tmp_path, monkeypatch):
+    """P6: max_seq_len is part of the config dict that is hashed into
+    config_checksum, so a mismatch in max_seq_len is rejected exactly the
+    same way as a vocab_size mismatch."""
+    m, cfg = make_model()
+    pause_path = tmp_path / "pause_state.json"
+    t = make_trainer(tmp_path, m, cfg, warning=0.5, hard_stop=0.6, baseline=1.0,
+                     max_steps=4, eval_interval=1, exemption=0,
+                     pause_path=pause_path, consecutive=5)
+    import aronalm.trainer as tmod
+    tmod.evaluate = lambda *a, **k: EvalResult(status="failed", error_message="fake")
+    summary = t.train()
+    assert summary["stopped"] == "failed"
+
+    m2, cfg2 = make_model(max_seq_len=16)  # different seq_len -> different checksum
+    t2 = make_trainer(tmp_path, m2, cfg2, warning=0.5, hard_stop=0.6, baseline=1.0,
+                      max_steps=4, eval_interval=1, exemption=0,
+                      pause_path=pause_path)
+    ok = t2.resume_from_pause(expected_step=1)
+    assert ok is False
+
+
+def test_hard_stop_state_field_subset(tmp_path):
+    """P5: a hard_stop state must carry ONLY the 9 approved fields.
+    We verify that writing and re-reading a hard-stop state produces
+    exactly the approved field set, and that no 10th field appears."""
+    import aronalm.trainer as tmod
+    m, cfg = make_model()
+    pause_path = tmp_path / "stop_state.json"
+    t = make_trainer(tmp_path, m, cfg, warning=1.0, hard_stop=1.5, baseline=0.5,
+                     max_steps=2, eval_interval=1, exemption=0,
+                     pause_path=pause_path, consecutive=1)
+    import aronalm.trainer as _t
+    _t.evaluate = lambda *a, **k: EvalResult(status="ok", loss=9.9)
+    summary = t.train()
+    assert summary["stopped"] == "hard_stop"
+    assert pause_path.exists()
+    payload = json.loads(pause_path.read_text(encoding="utf-8"))
+    # The full approved field set is 9 fields. A hard-stop state carries all 9
+    # (the optional ones are populated by make_state).
+    from aronalm.pause_state import ALL_FIELDS
+    assert set(payload.keys()) == set(ALL_FIELDS), (
+        f"field set mismatch: got {sorted(payload.keys())}, "
+        f"expected {sorted(ALL_FIELDS)}"
+    )
+    assert len(payload) == 9
+    # specifically: no 10th field such as model_checkpoint_path or
+    # validation_error_summary (removed in R2.16 from the R2.13 proposal)
+    assert "model_checkpoint_path" not in payload
+    assert "validation_error_summary" not in payload
+
+
+# ----------------------------------------------------------------------
+# 9b. anomaly pause halts the training loop (K4/K6: no auto-retry /
+#     no auto-recovery), counters kept, state JSON written
+# ----------------------------------------------------------------------
+def test_anomaly_pause_halts_training_no_retry(tmp_path, monkeypatch):
+    """K4: when an observation is anomalous the trainer must halt at that
+    step, keep the counters, write the 9-field state JSON, and must NOT
+    keep looping or auto-recover."""
+    m, cfg = make_model()
+    pause_path = tmp_path / "pause_state.json"
+    t = make_trainer(tmp_path, m, cfg, warning=0.5, hard_stop=0.6, baseline=1.0,
+                     max_steps=4, eval_interval=1, exemption=0,
+                     pause_path=pause_path, consecutive=5)
+    import aronalm.trainer as tmod
+
+    # 1st eval = ok, 2nd = failed; the loop must stop at the failed one.
+    calls = {"n": 0}
+
+    def fake_eval(*a, **k):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return EvalResult(status="ok", loss=0.1, perplexity=1.1)
+        return EvalResult(status="failed", error_message="injected failure")
+
+    tmod.evaluate = fake_eval
+    summary = t.train()
+    assert summary["stopped"] == "failed"
+    # only 2 evals ran (step 1 ok, step 2 failed -> halt), not 4
+    assert calls["n"] == 2
+    assert summary["steps_executed"] == 2
+    # no further training after the anomaly
+    assert t.train_paused is True
+    assert t.pause_reason == "failed"
+    # counters: step 1 (loss=0.1 < warning 0.5) cleared warn/hard to 0,
+    # the anomaly at step 2 kept them there
+    assert t.warn_consec == 0
+    assert t.hard_consec == 0
+    # the anomaly state was written and is readable
+    st = load_pause_state(pause_path)
+    assert st is not None
+    assert st.is_anomaly()
+    assert st.pause_reason == "failed"
+    assert st.step == 2
+    # no checkpoint written on the failed step
+    assert not (tmp_path / "checkpoint_step2.pt").exists()
 # ----------------------------------------------------------------------
 # 10. P5 state-file validation (corrupt / bad version / missing fields)
 # ----------------------------------------------------------------------
