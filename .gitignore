@@ -33,10 +33,12 @@ experiments/b5/b5_smoke_*/
 experiments/b5/b5_main_*/
 experiments/b5/b5_smoke_legacy_*/
 experiments/b5/b5_main_legacy_*/
+experiments/b5/b5_sampler_check_*/
 experiments/b5/*.pt
 experiments/b5/training_log*.json
 experiments/b5/run_metadata*.json
 experiments/b5/pause_state*.json
+experiments/b5/sampler_report*.json
 experiments/b5/__pycache__/
 
 # Temporary training output
