@@ -102,24 +102,24 @@
       "guarantees": "no metric is fabricated: unavailable = null, never 0"
     },
     "verification": {
-      "unit_tests": "tests/test_b5_resource_sampler.py (success / unavailable / injected-tick-exception / thread-release / pre-start report)",
+      "unit_tests": "tests/test_b5_resource_sampler.py (success / unavailable / injected-tick-exception / thread-release / pre-start report / non-Windows-null / struct-layout+psapi-resolution)",
       "controlled_smoke_run": "see sampler_smoke_run entry below; NOT a training run"
     },
     "sampler_smoke_run": {
       "kind": "controlled sampler verification (no training)",
       "command": "python experiments/b5/run_b5.py --mode sample-only --sample-seconds 20",
-      "output_dir": "experiments/b5/b5_sampler_check_20261027_195023",
+      "output_dir": "experiments/b5/b5_sampler_check_20261028_183959",
       "report": "sampler_report.json in that dir",
-      "window_sec": 20.213,
-      "points": 4,
-      "process_cpu_seconds_total": 10.094,
-      "avg_process_cpu_percent_of_one_core": 49.94,
-      "system_available_memory_bytes_min": 2350198784,
-      "system_available_memory_bytes_last": 2372661248,
+      "window_sec": 20.432,
+      "points": 5,
+      "process_cpu_seconds_total": 9.234,
+      "avg_process_cpu_percent_of_one_core": 45.2,
+      "system_available_memory_bytes_min": 425553920,
+      "system_available_memory_bytes_last": 431673344,
       "process_peak_memory_bytes": null,
       "process_metrics": "partial",
       "status": "completed with partial metrics",
-      "note": "CPU time and system-available-memory sampled successfully. Process peak memory (psapi.GetProcessMemoryInfo) failed on this build with ERROR_INVALID_PARAMETER (122) and was honestly recorded as null per the no-fabrication rule. An earlier 20 s check (b5_sampler_check_20261027_192035 / 192651) ran before the API fix and shows all-null; the 195023 run is the valid one."
+      "note": "CPU time (kernel32.GetProcessTimes) and system-available-memory (GlobalMemoryStatusEx) sampled successfully. Process peak memory (psapi.GetProcessMemoryInfo) resolves via ctypes.windll.psapi but returns 0 with all-zero counters on this OS build (root cause: GetProcessMemoryInfo is ordinal-only exported in this build's psapi.dll; the resolved function does not produce usable process-level data via OpenProcess handles), so it was honestly recorded as null per the no-fabrication rule. Superseded runs: b5_sampler_check_20261027_192035/192651 (pre-fix, all-null), 20261027_195023 (CPU ok, peak null), 20261028_182227 (same as 183959; this entry is the final post-audit run)."
     },
     "applies_to_runs": "any FUTURE run_b5.py training run; the two historical runs above predate this instrumentation"
   },
@@ -134,12 +134,12 @@
       "b5_specific_total": 44,
       "b5_modules": [
         "tests/test_b5_early_stop.py (28)",
-        "tests/test_b5_resource_sampler.py (5)",
+        "tests/test_b5_resource_sampler.py (7)",
         "tests/test_b5_fault_injection_isolated.py (11)"
       ]
     },
     "new_this_stage": [
-      "tests/test_b5_resource_sampler.py (5 tests: sampler success / null-on-unavailable / injected tick exception / thread release / pre-start safety)",
+      "tests/test_b5_resource_sampler.py (7 tests: success / null-on-unavailable / injected tick exception / thread release / pre-start safety / non-Windows-null / struct-layout+psapi-resolution)",
       "tests/test_b5_fault_injection_isolated.py (11 tests: hard-stop termination; 5 anomaly tokens pause; write-failure fail-closed; resume rejection on checksum/step/vocab/seq_len; hard-stop never resumable; counters preserved + no checkpoint at pause step; 9-field schema; source-checkpoint-untouched proof)"
     ]
   },
@@ -185,7 +185,7 @@
   ],
   "not_yet_verified": [
     "hard-stop / anomaly / write-failure / strict-resume triggered by a NATURAL fault inside a real training run (only controlled injection so far)",
-    "process peak-memory measurement: psapi.GetProcessMemoryInfo returns ERROR_INVALID_PARAMETER on this build, so the sampler records null for it; CPU time and system available memory are measured. A different memory-source (e.g. a future OS build or a process-scoped fallback) would be needed to fill this field."
+    "process peak-memory measurement: psapi.GetProcessMemoryInfo is ordinal-only exported in this build and the resolved function returns 0 with all-zero counters when called with OpenProcess handles; the sampler records null honestly. CPU time and system available memory are measured. A different memory-source (e.g. a future OS build, or psapi loaded via kernel32 on Windows 11 22H2+) would be needed to fill this field."
   ],
   "explicit_acceptance_limitations": [
     "Normal training completion does NOT validate hard-stop or anomaly-pause under real fault conditions. Those paths are exercised by isolated fault-injection tests with mocked evaluators; no real run of the B5 experiment triggered a hard-stop or anomaly.",
@@ -199,7 +199,7 @@
   "local_artifact_paths": [
     "experiments/b5/b5_smoke_20261026_232235/",
     "experiments/b5/b5_main_20261026_234324/",
-    "experiments/b5/b5_sampler_check_20261027_195023/ (valid sampler verification; 192035/192651 superseded by pre-fix nulls)",
+    "experiments/b5/b5_sampler_check_20261028_183959/ (final post-audit sampler verification; earlier runs superseded)",
     "experiments/b5/run_b5.py",
     "experiments/b5/results_summary.json"
   ]

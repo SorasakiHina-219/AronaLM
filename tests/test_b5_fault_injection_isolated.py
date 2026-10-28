@@ -50,7 +50,9 @@ from aronalm.trainer import Trainer
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE_CKPT = ROOT / "checkpoints_v2c_500steps" / "checkpoint_step350.pt"
-SOURCE_CKPT_HASH_BEFORE = None  # filled in by a fixture below
+# Fixed expected SHA-256 of the step-350 source checkpoint (lowercase).
+# Used for real before/after hash protection, not self-comparison.
+_EXPECTED_SOURCE_HASH = "8ff70323b055216a5a0f5372831d5ac38345cfa73083ceba84d995a5d21369dd"
 
 
 # ----------------------------------------------------------------------
@@ -124,8 +126,10 @@ def test_hard_stop_terminates(tmp_path):
     assert st.step == 2
     # no checkpoint written at the stop step (Decision B / P7)
     assert not (tmp_path / "checkpoint_step2.pt").exists()
-    # source checkpoint untouched
-    assert _source_ckpt_hash() == _source_ckpt_hash()  # stable across test
+    # source checkpoint untouched: hash must still equal the fixed expected
+    # value (real before/after check, not a self-comparison)
+    assert _source_ckpt_hash() == _EXPECTED_SOURCE_HASH, (
+        "source checkpoint hash changed during test")
 
 
 # ----------------------------------------------------------------------
@@ -310,6 +314,5 @@ def test_state_file_has_exactly_nine_fields(tmp_path):
 # whole module's tests have run.
 # ----------------------------------------------------------------------
 def test_source_checkpoint_untouched_after_module():
-    expected = "8ff70323b055216a5a0f5372831d5ac38345cfa73083ceba84d995a5d21369dd"
-    assert _source_ckpt_hash() == expected, (
+    assert _source_ckpt_hash() == _EXPECTED_SOURCE_HASH, (
         "source step-350 checkpoint hash changed during fault-injection tests")

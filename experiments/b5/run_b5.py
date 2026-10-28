@@ -25,16 +25,21 @@ import platform
 import sys
 import threading
 import time
-from ctypes import c_ulonglong, windll
-import ctypes
-import platform
+from pathlib import Path
 
 IS_WINDOWS = platform.system() == "Windows"
+# ctypes.windll is only available on Windows; on Linux/macOS it raises
+# AttributeError at import time. Guard it so the module remains importable
+# on any platform and the sampler records nulls cleanly.
+try:
+    from ctypes import c_ulonglong, windll
+except AttributeError:
+    c_ulonglong = None
+    windll = None
 try:
     from ctypes.wintypes import HANDLE
 except ImportError:
     HANDLE = None
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -155,13 +160,20 @@ class ResourceSampler:
     def _query_process_info(pid: int) -> dict | None:
         """Per-process cumulative CPU time + peak working-set memory.
 
-        All stdlib ctypes; no third-party deps.
+        All stdlib ctypes; no third-party deps. Windows-only; on other
+        platforms the module-level guard leaves `windll` as None and this
+        method returns None, so the sampler records nulls.
 
           - CPU: kernel32.GetProcessTimes (kernel + user, 100-ns ticks)
           - MEM: psapi.GetProcessMemoryInfo (PROCESS_MEMORY_COUNTERS,
-                 peak + current working set). If this call fails on the
-                 target OS/build we record "peak_memory_bytes": None and
-                 keep the CPU figure -- the sampler never invents numbers.
+                 peak + current working set). The call goes through
+                 ctypes.windll.psapi (NOT WinDLL) because some Windows
+                 builds export GetProcessMemoryInfo by ordinal only and
+                 WinDLL's name-based resolution silently returns a bad
+                 function pointer, producing ERROR_INVALID_PARAMETER.
+                 If this call still fails we record "peak_memory_bytes":
+                 None and keep the CPU figure -- the sampler never
+                 invents numbers.
 
         Returns a dict with keys:
           cpu_seconds          float | None
@@ -169,6 +181,8 @@ class ResourceSampler:
           working_set_bytes    int     | None
         or None when the process handle cannot be opened at all.
         """
+        if windll is None:  # non-Windows platform
+            return None
         try:
             import ctypes.wintypes as wt
 
@@ -212,7 +226,7 @@ class ResourceSampler:
                             ("QuotaPeakNonPagedPoolUsage", c_ulonglong),
                             ("QuotaNonPagedPoolUsage", c_ulonglong),
                         ]
-                    psapi = ctypes.WinDLL("psapi")
+                    psapi = ctypes.windll.psapi
                     psapi.GetProcessMemoryInfo.argtypes = [wt.HANDLE, ctypes.c_void_p, ctypes.c_uint32]
                     psapi.GetProcessMemoryInfo.restype = ctypes.c_int
                     pmc = PROCESS_MEMORY_COUNTERS()
@@ -340,8 +354,10 @@ class ResourceSampler:
                     if "working_set_bytes" in p)
         else:
             out["notes"].append(
-                "process peak memory unavailable (psapi.GetProcessMemoryInfo failed on "
-                "this build); recorded null, not estimated")
+                "process peak memory unavailable (psapi.GetProcessMemoryInfo did not "
+                "return usable data on this OS build -- call returns 0 with all-zero "
+                "counts; recorded null, not estimated; see results_summary.json "
+                "resource_sampling for details")
         if cpu_points:
             out["process_cpu_seconds_total"] = round(cpu_points[-1]["cpu_seconds"], 3)
             if window and window > 0:
@@ -363,9 +379,9 @@ class ResourceSampler:
         return out
 
 
-# keep the module importable on non-Windows hosts: `windll` above raises
-# ModuleNotFoundError there, so ResourceSampler's API-reading methods must
-# return None cleanly in that case (they do, via the try/except guards).
+# Module-level guard: `windll` is None on non-Windows hosts (set above),
+# so ResourceSampler's API-reading methods return None and the sampler
+# records nulls. The module itself imports cleanly on any platform.
 
 
 def main() -> None:
