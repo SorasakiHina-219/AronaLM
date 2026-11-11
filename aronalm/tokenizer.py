@@ -29,6 +29,25 @@ class BPETokenizer:
         self._pad_id = 0
         self._unk_id = 1
 
+    @property
+    def _actual_vocab_size(self) -> int:
+        """
+        Number of vocabulary entries that actually exist (``len(self.vocab)``).
+
+        BPE training stops early when the corpus stops producing new merges, so
+        this can be smaller than the declared ``vocab_size``. The model's token
+        embedding and output projection are sized ``vocab_size`` (the declared,
+        checkpoint-compatible upper bound); ids in
+        ``[_actual_vocab_size, vocab_size)`` are valid embedding rows but are
+        never produced by :meth:`encode`.
+
+        Compatibility rule: ``encode()`` only ever emits ids
+        ``< _actual_vocab_size <= vocab_size``, therefore every id produced by
+        the tokenizer is a valid index for a model built with ``vocab_size``.
+        Read-only; callers must not change vocabularies at runtime.
+        """
+        return len(self.vocab)
+
     def _get_initial_symbols(self) -> set[str]:
         """Byte-level initialization: all 256 byte values."""
         return {chr(i) for i in range(256)}

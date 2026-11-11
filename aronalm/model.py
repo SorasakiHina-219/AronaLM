@@ -145,6 +145,17 @@ class AronaLM(nn.Module):
 
     Architecture summary:
       TokenEmbedding -> PositionalEmbedding -> [DecoderLayer x N] -> LayerNorm -> OutputProjection
+
+    Vocabulary size vs. vocabulary entries:
+      ``TransformerConfig.vocab_size`` (e.g. 1000) sizes the token embedding and
+      output projection, and must match the checkpoint. The BPE tokenizer may
+      actually learn fewer entries than that bound (e.g. 558), because training
+      stops when the corpus stops producing new merges. The actual number of
+      learned entries N is determined by the training corpus and never exceeds
+      ``vocab_size``; ``BPETokenizer._actual_vocab_size`` reports it. Ids below N
+      are real tokens, ids in ``[N, vocab_size)`` are unused embedding rows that
+      keep the checkpoint shape stable. This is intentional and requires no
+      checkpoint change.
     """
 
     def __init__(self, config: TransformerConfig | None = None):
